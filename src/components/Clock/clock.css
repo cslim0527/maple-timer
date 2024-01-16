@@ -1,0 +1,71 @@
+.clock {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  background: #000;
+  font-size: 2px;
+  border-radius: 4px;
+  padding: 8px 0 4px 0;
+}
+.digit {
+  width: 12em;
+  position: relative;
+  height: 24em;
+}
+.hours,
+.minutes,
+.seconds {
+  position: relative;
+  display: flex;
+}
+.segment {
+  width: 8em;
+  height: 2em;
+  background-color: #efba1e;
+  opacity: 0.08;
+  position: absolute;
+
+  border-radius: 10em;
+  transition: opacity 400ms;
+}
+.colons {
+  display: flex;
+  justify-content: space-around;
+  height: 12em;
+  flex-direction: column;
+  transform: translateX(-2em);
+}
+.colon {
+  width: 3em;
+  height: 3em;
+  background-color: #efba1e;
+  border-radius: 50%;
+}
+.segment-2 {
+  transform-origin: top left;
+  transform: rotate(90deg) translate(1.5em, -0.05em);
+}
+.segment-3 {
+  transform-origin: top right;
+  transform: rotate(-90deg) translate(-1.5em, -0.5em);
+}
+.segment-4 {
+  transform: translateY(9em);
+}
+.segment-5 {
+  transform-origin: top left;
+  transform: rotate(90deg) translate(10.5em, -0.5em);
+}
+.segment-6 {
+  transform-origin: top right;
+  transform: rotate(-90deg) translate(-10.5em, -0.5em);
+}
+.segment-7 {
+  transform: translateY(18em);
+}
+.active {
+  opacity: 1;
+}
