@@ -1,17 +1,26 @@
-import { useTimer } from "@/hooks/useTimer";
+import { TimeState, useTimer } from "@/hooks/useTimer";
 import Image from "next/image";
 import Button from "../Button";
 import Clock from "../Clock";
 import Item from "../Item";
 import { Boss } from "@/data";
+import { useEffect, useMemo } from "react";
 
 interface CardProps {
+  isShow: boolean;
   children?: React.ReactNode;
-  thumbnail: string;
+  thumbnail: Boss["thumbnail"];
   details: Boss;
+  handleSyncFilterAndTimer: (bossName: string, timeState: TimeState) => void;
 }
 
-const Card = ({ children, thumbnail, details }: CardProps) => {
+const Card = ({
+  isShow,
+  children,
+  thumbnail,
+  details,
+  handleSyncFilterAndTimer,
+}: CardProps) => {
   const {
     time,
     timeState,
@@ -20,9 +29,17 @@ const Card = ({ children, thumbnail, details }: CardProps) => {
     handleReStartTimer,
   } = useTimer({ startTime: details.zenDelay });
 
+  const thumbnailSrc = useMemo(() => {
+    return timeState === "wait" ? thumbnail.on : thumbnail.off;
+  }, [timeState]);
+
+  useEffect(() => {
+    handleSyncFilterAndTimer(details.name, timeState);
+  }, [timeState]);
+
   return (
     <div
-      style={{ width: "100%", height: 350 }}
+      style={{ width: "100%", height: 350, display: isShow ? "flex" : "none" }}
       className="flex bg-white rounded-lg shadow w-60 dark:bg-gray-700"
     >
       <div
@@ -44,7 +61,14 @@ const Card = ({ children, thumbnail, details }: CardProps) => {
           Tooltip content
           <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <Image width={132} height={116} src={thumbnail} alt={thumbnail} />
+        <div style={{ height: 200 }}>
+          <Image
+            width={132}
+            height={116}
+            src={thumbnailSrc}
+            alt={thumbnailSrc}
+          />
+        </div>
 
         <div className="p-4 w-full">
           <Clock time={time} />
@@ -81,15 +105,17 @@ const Card = ({ children, thumbnail, details }: CardProps) => {
           </ul>
         </div>
 
-        <div
-          className="overflow-scroll"
-          style={{ overscrollBehaviorY: "none" }}
-        >
+        <div>
           <p className="text-xl font-bold dark:text-white mb-2">드랍템</p>
-          <div className="flex flex-wrap gap-2 w-full items-start content-start">
-            {details.drop.map(({ name, image }, idx) => (
-              <Item key={`drop-item-${idx}`} name={name} image={image} />
-            ))}
+          <div
+            className="overflow-scroll"
+            style={{ overscrollBehaviorY: "none", height: "calc(100% - 40px)" }}
+          >
+            <div className="flex flex-wrap gap-2 w-full items-start content-start ">
+              {details.drop.map(({ name, image }, idx) => (
+                <Item key={`drop-item-${idx}`} name={name} image={image} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { Boss } from "@/data";
 import Button from "@/components/Button";
 
@@ -8,7 +8,7 @@ interface BossFilterProps {
 }
 
 const BossFilter = ({ data, handleCheck }: BossFilterProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleCloseFilter = () => {
     setIsOpen(false);
@@ -59,7 +59,7 @@ const BossFilter = ({ data, handleCheck }: BossFilterProps) => {
         </button>
       </p>
 
-      <ul className="h-48 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200">
+      <ul className="h-48 pb-3 overflow-y-auto text-sm dark:text-gray-200">
         {(data as Boss[]).map((boss, idx) => (
           <li key={`filter-item-${idx}`}>
             <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -67,15 +67,16 @@ const BossFilter = ({ data, handleCheck }: BossFilterProps) => {
                 id={`boss-input-${idx}`}
                 type="checkbox"
                 value=""
+                disabled={boss.isPlay}
                 defaultChecked={true}
                 onChange={(e) => handleCheck(e.target.checked, boss.name)}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                className="w-4 h-4 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
               />
               <label
                 htmlFor={`boss-input-${idx}`}
                 className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 ml-1"
               >
-                {boss.name}
+                {boss.isPlay ? <del>{boss.name}</del> : boss.name}
               </label>
             </div>
           </li>
